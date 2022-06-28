@@ -5,6 +5,7 @@ from math import ceil
 from keras_preprocessing.image import ImageDataGenerator
 from keras.models import Sequential
 from keras.layers import Conv2D, Dense, MaxPool2D, Flatten
+from keras.callbacks import EarlyStopping
 
 
 # cnn.fit: (x_train, y_train, epochs)
@@ -59,4 +60,6 @@ if __name__ == '__main__':
         Dense(4, activation='softmax')
     ])
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-    model_fit = model.fit(train_data, epochs=15, validation_data=test_data)
+
+    es_callback = EarlyStopping(monitor='val_loss', patience=5)
+    model_fit = model.fit(train_data, epochs=25, validation_data=test_data, callbacks=[es_callback], validation_split=0.25)
